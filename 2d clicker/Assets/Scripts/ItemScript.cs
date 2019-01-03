@@ -15,7 +15,7 @@ public class ItemScript : MonoBehaviour
 	public int moneyGenerated = 50;
 	float timePerGeneration = 5.0f; 
 	float timeDelay = 5.0f; 
-    
+
 	void Update()
     {
 		itemAmountText.GetComponent<Text>().text = "#" + itemAmount; 
