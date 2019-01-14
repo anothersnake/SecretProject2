@@ -10,28 +10,30 @@ public class ItemScript : MonoBehaviour
 	public GameObject outputMoneyText; 
 
 	public int itemAmount = 0; 
-	public int upgradePrice = 1; 
+	public int upgradePrice = 10; 
+	public int baseCost = 10; 
 	//constant for testing, need to update in the buttonPress function to calculate the new moneyGenerated value 
-	public int moneyGenerated = 50;
-	float timePerGeneration = 5.0f; 
-	float timeDelay = 5.0f; 
+	public int baseMoneyGenerated = 2; 
+	public int totalMoneyGenerated = 50;
+	public float timePerGeneration = 5.0f; 
+	public float timeDelay = 5.0f; 
 
 	void Update()
     {
 		itemAmountText.GetComponent<Text>().text = "#" + itemAmount; 
 		upgradePriceText.GetComponent<Text>().text = "Upgrade: $" + upgradePrice; 
-		outputMoneyText.GetComponent<Text> ().text = moneyGenerated + " every x seconds";
+		outputMoneyText.GetComponent<Text> ().text = totalMoneyGenerated + " every x seconds";
     }
 
 	public void buttonPress(){
-		if (itemAmount == 0) {
-			InvokeRepeating ("addMoney", timeDelay, timePerGeneration);  
-		}
 		if (GlobalMoneyCount.MoneyCount >= upgradePrice) {
+			if (itemAmount == 0) {
+				InvokeRepeating ("addMoney", timeDelay, timePerGeneration);  
+			}
 			GlobalMoneyCount.MoneyCount -= upgradePrice; 
+			upgradePrice = (int)(baseCost * Mathf.Pow((float)1.07, itemAmount)); 
 			itemAmount += 1;
-			//Do formula stuff here 
-			upgradePrice += 20; 
+			totalMoneyGenerated += baseMoneyGenerated; 
 		} 
 		else {
 			//do something that tells user they cant click this button
@@ -40,6 +42,6 @@ public class ItemScript : MonoBehaviour
 	}
 	
 	void addMoney(){
-		GlobalMoneyCount.MoneyCount += moneyGenerated;			
+		GlobalMoneyCount.MoneyCount += totalMoneyGenerated ;			
 	}
 }
